@@ -1,0 +1,785 @@
+/* ─── :3 ──────────────────────────────────────────────────────────────────── */
+
+.emote-3 {
+  color: var(--md-accent-fg-color);
+  font-weight: 700;
+}
+
+/* ─── Blame Toggle Button ─────────────────────────────────────────────────── */
+
+#blame-toggle {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 1000;
+  background: var(--md-primary-fg-color);
+  color: var(--md-primary-bg-color);
+  border: none;
+  border-radius: 999px;
+  padding: 9px 18px 9px 14px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: var(--md-text-font);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.22), 0 1px 3px rgba(0, 0, 0, 0.10);
+  transition: background 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  line-height: 1;
+}
+
+#blame-toggle:hover {
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.30), 0 2px 4px rgba(0, 0, 0, 0.12);
+  transform: translateY(-1px);
+}
+
+#blame-toggle:active {
+  transform: translateY(0);
+}
+
+#blame-toggle[aria-pressed="true"] {
+  background: var(--md-accent-fg-color);
+}
+
+#blame-toggle svg {
+  display: block;
+  flex-shrink: 0;
+}
+
+/* ─── Blame Date Badges ───────────────────────────────────────────────────── */
+
+.blame-badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 400;
+  font-family: var(--md-code-font);
+  color: var(--md-default-fg-color--light);
+  background: var(--md-code-bg-color);
+  border: 1px solid var(--md-default-fg-color--lightest);
+  padding: 1px 8px;
+  border-radius: 10px;
+  margin-left: 10px;
+  vertical-align: middle;
+  white-space: nowrap;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.blame-badge:hover {
+  border-color: var(--md-default-fg-color--light);
+  color: var(--md-default-fg-color);
+}
+
+/* Light-mode contrast bump: muddy on near-white otherwise */
+[data-md-color-scheme="default"] .blame-badge {
+  background: rgba(0, 0, 0, 0.035);
+  border-color: rgba(0, 0, 0, 0.10);
+}
+
+/* ─── Edit History Details Block ─────────────────────────────────────────── */
+/* Styles the <details> contribution history blocks in each page */
+
+/* Strip Material's default <details> box (border, background, icons) so ours
+   isn't wrapped in a full-width admonition frame. */
+.md-typeset details.edit-history {
+  margin: 4px 0 22px;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  font-size: inherit;
+}
+
+/* Summary rendered as a modern pill — same language as the Show Dates button. */
+.md-typeset details.edit-history > summary {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  list-style: none;
+  cursor: pointer;
+  user-select: none;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: var(--md-text-font);
+  line-height: 1;
+  color: var(--md-default-fg-color--light);
+  background: var(--md-code-bg-color);
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-radius: 999px;
+  padding: 8px 14px 8px 12px;
+  /* Cancel Material's negative summary margins, which otherwise pull the pill
+     into the left gutter (its default summary bleeds to the admonition edge). */
+  margin: 0;
+  transition: background 0.18s ease, border-color 0.18s ease,
+              color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.md-typeset details.edit-history > summary::-webkit-details-marker {
+  display: none;
+}
+
+/* Kill Material's admonition icon (left) that it injects via ::before. */
+.md-typeset details.edit-history > summary::before {
+  display: none;
+}
+
+.md-typeset details.edit-history > summary svg {
+  display: block;
+  flex-shrink: 0;
+  color: var(--md-accent-fg-color);
+}
+
+/* Chevron on the right that rotates when open — override Material's twistie,
+   which is an absolutely-positioned masked icon. */
+.md-typeset details.edit-history > summary::after {
+  position: static;
+  content: "";
+  width: 6px;
+  height: 6px;
+  margin-left: 3px;
+  border-right: 1.8px solid currentColor;
+  border-bottom: 1.8px solid currentColor;
+  background: none;
+  -webkit-mask: none;
+          mask: none;
+  transform: rotate(45deg) translate(-1px, -1px);
+  transition: transform 0.2s ease;
+  opacity: 0.65;
+}
+
+.md-typeset details.edit-history > summary:hover {
+  color: var(--md-default-fg-color);
+  border-color: var(--md-default-fg-color--light);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.10);
+}
+
+.md-typeset details.edit-history[open] > summary {
+  color: var(--md-default-fg-color);
+  border-color: var(--md-accent-fg-color);
+}
+
+.md-typeset details.edit-history[open] > summary::after {
+  transform: rotate(225deg) translate(-1px, -1px);
+}
+
+.md-typeset details.edit-history table {
+  font-size: 13px;
+}
+
+/* Expanding content — a soft card that reveals with a subtle slide + fade. */
+.edit-history-body {
+  display: flex;
+  gap: 26px;
+  align-items: center;
+  margin: 12px 0 0;
+  padding: 20px 22px;
+  flex-wrap: wrap;
+  background: var(--md-code-bg-color);
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-radius: 14px;
+  animation: edit-history-reveal 0.22s ease;
+}
+
+@keyframes edit-history-reveal {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Real ring chart (mask the centre out of the conic-gradient pie). */
+.edit-history-donut {
+  flex-shrink: 0;
+  width: 148px;
+  height: 148px;
+  border-radius: 50%;
+  -webkit-mask: radial-gradient(circle at center, transparent 46%, #000 47%);
+          mask: radial-gradient(circle at center, transparent 46%, #000 47%);
+}
+
+.edit-history-legend {
+  flex: 1;
+  min-width: 160px;
+}
+
+.edit-history-legend-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.edit-history-legend-item:last-child {
+  margin-bottom: 0;
+}
+
+.edit-history-legend-swatch {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 9px;
+  flex-shrink: 0;
+}
+
+.edit-history-legend-label {
+  font-size: 13px;
+  color: var(--md-default-fg-color--light);
+}
+
+/* ─── Calendar ────────────────────────────────────────────────────────────── */
+
+.cal-month-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 20px;
+}
+
+.cal-month-btn {
+  background: var(--md-code-bg-color);
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-radius: 16px;
+  padding: 4px 14px;
+  font-size: 13px;
+  font-family: var(--md-text-font);
+  color: var(--md-default-fg-color);
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.cal-month-btn:hover {
+  border-color: var(--md-primary-fg-color);
+  color: var(--md-primary-fg-color);
+}
+
+.cal-month-btn-active {
+  background: var(--md-primary-fg-color) !important;
+  border-color: var(--md-primary-fg-color) !important;
+  color: var(--md-primary-bg-color) !important;
+}
+
+.cal-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 24px;
+  font-size: 13px;
+}
+
+.cal-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.cal-legend-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.cal-month {
+  margin-bottom: 32px;
+}
+
+.cal-month-title {
+  font-size: 16px;
+  margin-bottom: 8px;
+  border: none !important;
+}
+
+.cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+
+.cal-day-header {
+  text-align: center;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--md-default-fg-color--light);
+  padding: 4px 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.cal-day {
+  min-height: 64px;
+  border-radius: 5px;
+  padding: 5px 6px;
+  background: var(--md-code-bg-color);
+  border: 1px solid transparent;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  transition: border-color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.cal-empty {
+  background: transparent;
+  border-color: transparent;
+}
+
+.cal-has-entry {
+  cursor: default;
+}
+
+.cal-has-entry:hover {
+  border-color: var(--md-default-fg-color--light);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.10);
+}
+
+/* Today highlight — emitted by sessions.py::render_month */
+.cal-today {
+  outline: 2px solid var(--md-primary-fg-color);
+  outline-offset: -2px;
+  background: color-mix(in srgb, var(--md-primary-fg-color) 8%, var(--md-code-bg-color));
+}
+
+.cal-today .cal-day-num {
+  color: var(--md-primary-fg-color);
+}
+
+/* Multi-type border-image fallback — when unsupported, the transparent
+   border-top would otherwise vanish. Give it a visible color so multi-type
+   days still read as "has entry". Browsers that support border-image
+   continue to render the gradient unchanged. */
+@supports not (border-image: linear-gradient(to right, #000, #fff) 1) {
+  .cal-has-entry[style*="border-image"] {
+    border-top: 3px solid var(--md-primary-fg-color) !important;
+    border-image: none !important;
+  }
+}
+
+.cal-day-num {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--md-default-fg-color);
+}
+
+.cal-day-hours {
+  font-size: 11px;
+  color: var(--md-default-fg-color--light);
+  font-family: var(--md-code-font);
+}
+
+.cal-day-who {
+  font-size: 10px;
+  color: var(--md-default-fg-color--light);
+  font-family: var(--md-code-font);
+  letter-spacing: 1px;
+}
+
+/* Light-mode calendar day contrast */
+[data-md-color-scheme="default"] .cal-day {
+  background: rgba(0, 0, 0, 0.035);
+}
+
+[data-md-color-scheme="default"] .cal-has-entry:hover {
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+/* ─── Session Log ─────────────────────────────────────────────────────────── */
+
+.session-log {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.session-entry {
+  border-radius: 7px;
+  overflow: hidden;
+  border: 1px solid var(--md-default-fg-color--lightest);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.session-entry:hover {
+  border-color: var(--md-default-fg-color--light);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+}
+
+.session-header {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 9px 13px;
+  background: var(--md-code-bg-color);
+}
+
+.session-date {
+  font-family: var(--md-code-font);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.session-time {
+  font-family: var(--md-code-font);
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--md-default-fg-color--light);
+}
+
+.session-badge {
+  font-size: 11px;
+  color: #fff;
+  padding: 2px 9px;
+  border-radius: 10px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.18);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12),
+              0 1px 2px rgba(0, 0, 0, 0.10);
+}
+
+.session-hours {
+  font-family: var(--md-code-font);
+  font-size: 12px;
+  color: var(--md-default-fg-color--light);
+}
+
+.session-who {
+  font-size: 12px;
+  color: var(--md-default-fg-color--light);
+  margin-left: auto;
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.session-summary {
+  margin: 10px 13px 4px;
+  font-size: 14px;
+}
+
+.session-nb-link {
+  margin: 4px 13px 10px;
+  font-size: 13px;
+}
+
+.session-materials {
+  margin: 4px 13px 10px;
+  font-size: 13px;
+}
+
+.session-materials summary {
+  cursor: pointer;
+  color: var(--md-default-fg-color--light);
+}
+
+.mat-table {
+  font-size: 12px;
+  margin-top: 6px;
+  width: auto;
+}
+
+.mat-action { font-weight: 500; }
+.mat-used    { color: #4CAF50; }
+.mat-ordered { color: #2196F3; }
+.mat-broken  { color: #F44336; }
+.mat-returned { color: #FF9800; }
+
+/* Light-mode session log contrast */
+[data-md-color-scheme="default"] .session-entry {
+  border-color: rgba(0, 0, 0, 0.10);
+}
+
+[data-md-color-scheme="default"] .session-entry:hover {
+  border-color: rgba(0, 0, 0, 0.22);
+}
+
+[data-md-color-scheme="default"] .session-header {
+  background: rgba(0, 0, 0, 0.035);
+}
+
+[data-md-color-scheme="default"] .mat-used    { color: #2E7D32; }
+[data-md-color-scheme="default"] .mat-ordered { color: #1565C0; }
+[data-md-color-scheme="default"] .mat-broken  { color: #C62828; }
+[data-md-color-scheme="default"] .mat-returned { color: #E65100; }
+
+/* ─── Stats Page ──────────────────────────────────────────────────────────── */
+
+.stats-page h2 {
+  margin-top: 28px;
+  margin-bottom: 8px;
+}
+
+/* Make stats donuts responsive — they're hardcoded 120px inline by stats.py.
+   We override using attribute selectors so we don't break stats.py rendering. */
+.stats-page div[style*="border-radius:50%"][style*="conic-gradient"] {
+  width: clamp(96px, 28vw, 160px) !important;
+  height: clamp(96px, 28vw, 160px) !important;
+}
+
+/* Light table polish on the stats page */
+.stats-page table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 14px;
+}
+
+.stats-page thead tr {
+  border-bottom: 2px solid var(--md-default-fg-color--lightest) !important;
+}
+
+.stats-page tbody tr {
+  transition: background 0.12s ease;
+}
+
+.stats-page tbody tr:hover {
+  background: rgba(128, 128, 128, 0.10) !important;
+}
+
+[data-md-color-scheme="default"] .stats-page thead tr {
+  border-bottom-color: rgba(0, 0, 0, 0.18) !important;
+}
+
+[data-md-color-scheme="default"] .stats-page tbody tr:hover {
+  background: rgba(0, 0, 0, 0.05) !important;
+}
+
+/* Wrap the donut+legend row gracefully on narrow viewports */
+@media (max-width: 480px) {
+  .stats-page div[style*="display:flex"][style*="conic-gradient"] {
+    flex-wrap: wrap;
+  }
+}
+
+/* ─── Team Journal ────────────────────────────────────────────────────────── */
+
+.journal-entries {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.journal-entry {
+  border-radius: 6px;
+  border: 1px solid var(--md-default-fg-color--lightest);
+  overflow: hidden;
+}
+
+.journal-header {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 8px 12px;
+  background: var(--md-code-bg-color);
+}
+
+.journal-date {
+  font-family: var(--md-code-font);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.journal-summary {
+  margin: 8px 16px 4px;
+  font-size: 13px;
+  color: var(--md-default-fg-color--light);
+}
+
+.journal-text {
+  padding: 4px 16px 12px;
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+.journal-text p {
+  margin-bottom: 10px;
+}
+
+[data-md-color-scheme="default"] .journal-entry {
+  border-color: rgba(0, 0, 0, 0.10);
+}
+
+[data-md-color-scheme="default"] .journal-header {
+  background: rgba(0, 0, 0, 0.035);
+}
+
+/* ─── Home & Overview (nav-agent additions) ─── */
+
+/* Member cards on docs/index.md */
+
+.member-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 14px;
+  margin: 16px 0 24px;
+}
+
+.member-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 14px 16px;
+  border-radius: 8px;
+  border: 1px solid var(--md-default-fg-color--lightest);
+  background: var(--md-code-bg-color);
+  transition: border-color 0.15s, transform 0.15s;
+}
+
+.member-card:hover {
+  border-color: var(--md-primary-fg-color);
+  transform: translateY(-1px);
+}
+
+.member-name {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--md-default-fg-color);
+  margin-bottom: 2px;
+}
+
+.member-role {
+  font-size: 13px;
+  color: var(--md-default-fg-color--light);
+  line-height: 1.35;
+}
+
+/* Light-scheme tweak: nudge card surface so it isn't pure white. */
+[data-md-color-scheme="default"] .member-card {
+  background: rgba(0, 0, 0, 0.03);
+}
+
+[data-md-color-scheme="slate"] .member-card {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+/* Quick stats strip — three tiles below the member cards. */
+
+.quick-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin: 16px 0 28px;
+}
+
+.quick-stat-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 18px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--md-default-fg-color--lightest);
+  background: var(--md-code-bg-color);
+}
+
+.quick-stat-value {
+  font-family: var(--md-code-font);
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--md-primary-fg-color);
+}
+
+.quick-stat-label {
+  margin-top: 6px;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--md-default-fg-color--light);
+}
+
+[data-md-color-scheme="default"] .quick-stat-tile {
+  background: rgba(0, 0, 0, 0.03);
+}
+
+[data-md-color-scheme="slate"] .quick-stat-tile {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+@media (max-width: 540px) {
+  .quick-stats {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Overview page — 2-column card grid per section. */
+
+.overview-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  margin: 12px 0 28px;
+}
+
+@media (max-width: 720px) {
+  .overview-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.overview-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 14px 16px;
+  border-radius: 8px;
+  border: 1px solid var(--md-default-fg-color--lightest);
+  background: var(--md-code-bg-color);
+  color: var(--md-default-fg-color);
+  text-decoration: none !important;
+  transition: border-color 0.15s, transform 0.15s, background 0.15s;
+}
+
+.overview-card:hover {
+  border-color: var(--md-primary-fg-color);
+  transform: translateY(-1px);
+  color: var(--md-default-fg-color);
+}
+
+.overview-card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--md-primary-fg-color);
+}
+
+.overview-card-desc {
+  font-size: 13px;
+  color: var(--md-default-fg-color--light);
+  line-height: 1.4;
+}
+
+[data-md-color-scheme="default"] .overview-card {
+  background: rgba(0, 0, 0, 0.03);
+}
+
+[data-md-color-scheme="slate"] .overview-card {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+/* ─── Page Embeds (Obsidian-style transclusion) ───────────────────────────── */
+
+.page-embed {
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-left: 3px solid var(--md-accent-fg-color);
+  border-radius: 6px;
+  padding: 0.4rem 1rem 0.6rem;
+  margin: 1rem 0;
+  background: var(--md-code-bg-color);
+}
+
+.page-embed__head {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 700;
+  margin: 0.2rem 0 0.4rem;
+  opacity: 0.85;
+}
+
+.page-embed__head::before {
+  content: "↳ ";
+  opacity: 0.6;
+  font-weight: 500;
+}
+
+.page-embed > :last-child {
+  margin-bottom: 0;
+}
